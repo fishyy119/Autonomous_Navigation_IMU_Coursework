@@ -1,4 +1,4 @@
-R = R_2; % 其他脚本计算得出，根据不同时刻的测量数据计算得出
+R = R_4; % 其他脚本计算得出，根据不同时刻的测量数据计算得出
 R = R(10: end-10); % 舍弃首尾
 
 mean_R = mean(R);
@@ -21,23 +21,23 @@ edges = 0:bin_width:3;
 
 % 初始化区间，从峰顶开始扩展
 cumulative_counts = cumsum(counts);  % 计算累积频率
-target_cumulative = 0.2;  % 设定目标累积频率（0.3 或 0.5）
+target_cumulative = 0.1;  % 设定目标累积频率（0.3 或 0.5）
 leftIndex = peakIndex;  % 左边界从峰顶开始
 rightIndex = peakIndex;  % 右边界从峰顶开始
 
 % 扩展区间，直到累积频率达到目标值，同时保持两侧尽量对称
-while cumulative_counts(rightIndex) - cumulative_counts(leftIndex-1) < target_cumulative
-    % 向两侧扩展
-    if leftIndex > 1
-        leftIndex = leftIndex - 1;  % 向左扩展
-    end
-    if rightIndex < length(counts)
-        rightIndex = rightIndex + 1;  % 向右扩展
-    end
-end
+% while cumulative_counts(rightIndex) - cumulative_counts(leftIndex-1) < target_cumulative
+%     % 向两侧扩展
+%     if leftIndex > 1
+%         leftIndex = leftIndex - 1;  % 向左扩展
+%     end
+%     if rightIndex < length(counts)
+%         rightIndex = rightIndex + 1;  % 向右扩展
+%     end
+% end
 
 % 计算最终选定的区间
-mode_interval = edges(leftIndex:rightIndex+1);
+% mode_interval = edges(leftIndex:rightIndex+1);
 
 % 绘制直方图
 figure;
@@ -49,9 +49,9 @@ xlim([0, 1.5]);
 grid on;
 
 % 标注选定的区间
-hold on;
-y_limits = ylim; % 获取 y 轴的上下限
-plot([mode_interval(1), mode_interval(1)], y_limits, 'r--', 'DisplayName', '目标累积频率区间');
-plot([mode_interval(end), mode_interval(end)], y_limits, 'r--');
-legend('show');
-hold off;
+% hold on;
+% y_limits = ylim; % 获取 y 轴的上下限
+% plot([mode_interval(1), mode_interval(1)], y_limits, 'r--', 'DisplayName', '目标累积频率区间');
+% plot([mode_interval(end), mode_interval(end)], y_limits, 'r--');
+% legend('show');
+% hold off;

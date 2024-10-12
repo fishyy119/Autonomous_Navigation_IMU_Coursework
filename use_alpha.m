@@ -14,13 +14,16 @@ G = 9.8015; % 重力加速度 (m/s^2)
 
 % 计算静止时漂移特征量
 % 可能存在的问题：静止状态偏离0是否会是桌面倾斜导致的
+% 在大概0.5°的桌面倾角下，沿桌面摩擦力会产生约0.009g的加速度
+% 传感器静止状态下的加速度读数很可能是桌面倾斜导致的
 drift_data = importdata('s.txt').data;
 mean_drift = mean(drift_data);
 mean_drift = [mean_drift(1: 2), zeros([1, 10])];  % 只用到a_x与a_y的漂移
 
 % 测量数据
 % data = importdata('2.txt').data - mean_drift;
-data = importdata('1.txt').data;
+data = importdata('o_3.txt');
+data = str2double(data.textdata(2:end, 3:12));
 
 % 读取测量数据
 measured_ax = data(:, 1) .* G;
