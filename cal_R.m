@@ -13,7 +13,7 @@ median_cut = median(R_cut);
 
 %% 创建直方图（另一种方法，寻找众数）
 bin_width = 0.02; % 区间宽度
-edges = 0:bin_width:3;
+edges = -10:bin_width:3;
 [counts, edges] = histcounts(R, edges, 'Normalization', 'probability');  % 计算归一化后的概率（频率）
 
 % 找到直方图的峰顶位置
@@ -41,7 +41,7 @@ rightIndex = peakIndex;  % 右边界从峰顶开始
 
 % 绘制直方图
 figure;
-histogram(R, edges, 'Normalization', 'probability');
+histogram(log(R), edges, 'Normalization', 'probability');
 title('半径数据直方图');
 xlabel('半径 (m)');
 ylabel('频率');

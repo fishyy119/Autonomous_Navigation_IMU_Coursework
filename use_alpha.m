@@ -22,8 +22,9 @@ mean_drift = [mean_drift(1: 2), zeros([1, 10])];  % 只用到a_x与a_y的漂移
 
 % 测量数据
 % data = importdata('2.txt').data - mean_drift;
-data = importdata('o_3.txt');
-data = str2double(data.textdata(2:end, 3:12));
+data = importdata('1.txt');
+% data = str2double(data.textdata(2:end, 3:12)); % 这个适配o开头的数据，因为倒数第二列的版本号，data里只有最后一列
+data = data.data; % 这个适配1、2、s
 
 % 读取测量数据
 measured_ax = data(:, 1) .* G;
