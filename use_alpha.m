@@ -33,6 +33,8 @@ measured_az = (data(:, 3) - 1) .* G; % 不考虑本体z轴偏离重力方向
 measured_omega_x = data(:, 4) .* DEG2RAD;
 measured_omega_y = data(:, 5) .* DEG2RAD;
 measured_omega_z = data(:, 6) .* DEG2RAD;
+measured_theta_x = data(:, 7) .* DEG2RAD;
+measured_theta_y = data(:, 8) .* DEG2RAD;
 
 % 低通滤波器滤波
 % 表现不佳
@@ -47,6 +49,11 @@ averaged_omega_z = average_sampling(measured_omega_z, group_size);
 
 
 %% 计算 
+% 根据姿态角xy解算重力加速度的平面分量进行补偿
+corrected_ax = measured_ax - (-sin(measured_theta_y) .* G);
+corrected_ay = measured_ay - (sin(measured_theta_x) .* cos(measured_theta_y) .* G);
+corrected_acc_total = sqrt(corrected_ax.^2 + corrected_ay.^2);
+
 % 角加速度，平面情形
 alpha_z = diff(measured_omega_z) / dt; % 角加速度，注意差分后长度减一
 alpha_z = [alpha_z(1); alpha_z];  % 保持与原始数据长度一致，不管第一项
@@ -78,8 +85,10 @@ R_2 = measured_acc_total ./ (measured_omega_z .^ 2 + abs(alpha_z));
 % 半径估算（中心差分法求角加速度）
 % R_4表现最好
 % R_5阶数增高反倒更差
+% R_4/R_corrected所用公式是正确的，其他的效果不好，就没有改正错误公式
 R_3 = measured_acc_total ./ (measured_omega_z .^ 2 + abs(alpha_z_central));
-R_4 = measured_acc_total ./ (measured_omega_z .^ 2 + abs(alpha_z_central_4));
+R_4 = measured_acc_total ./ sqrt(measured_omega_z .^4 + alpha_z_central_4 .^2);
+R_corrected = corrected_acc_total ./ sqrt(measured_omega_z .^4 + alpha_z_central_4 .^2);
 R_5 = measured_acc_total ./ (measured_omega_z .^ 2 + abs(alpha_z_central_8));
 R_3d = measured_acc_3d ./ (measured_omega_3d_square + abs(alpha_3d));
 
