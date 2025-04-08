@@ -21,6 +21,7 @@
 
 ## Other common binary file types
 *.docx binary
+*.vsdx binary
 *.exe binary
 *.jpg binary
 *.pdf binary
